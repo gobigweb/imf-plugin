@@ -1,4 +1,5 @@
 <?php 
+session_start();
 /**
 * Plugin Name: Social Media Frame Creator
 * Plugin URI: https://gobigweb.com/
@@ -21,23 +22,139 @@
 * GNU General Public License for more details.
 */
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
 
-define('IMFPLUGIN_URL', plugin_dir_url(__FILE__));
+defined( 'ABSPATH' ) or die( 'You cannot be here.' );
 
 define('IMFPLUGIN_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
+define('IMFPLUGIN_URL', plugin_dir_url(__FILE__));
+
 define('IMFPLUGIN_BASE_URL', plugin_basename(__FILE__));
 
-// Create Plugin Admin Menus and Setting Pages
-include( plugin_dir_path( __FILE__ ) . 'includes/social-media-frame-menus.php');
+if ( !class_exists( 'SocialMediaFrame' ) ) {
+    class SocialMediaFrame {
+        public function __construct(){}
 
-include( plugin_dir_path( __FILE__ ) . 'includes/social-media-frame-html.php');
+        public static function init() {
 
-add_shortcode('social-media-frame', 'social_media_frame');
+            $class = new self();
+            $class->action_hooks();
+            $class->include_files();
+        }
 
+        private function include_files(){
+            // Enqueue Plugin CSS
+            include(IMFPLUGIN_PLUGIN_PATH.'includes/social-media-frame-styles.php');
+
+            // Enqueue Plugin JavaScript
+            include( IMFPLUGIN_PLUGIN_PATH.'includes/social-media-frame-scripts.php');
+        }
+
+        private function action_hooks() {
+            add_shortcode('social-media-frame', array( $this,'social_media_frame'));
+            add_action( 'admin_menu',array( $this,'addMenu') );
+
+            $filter_name = "plugin_action_links_" . IMFPLUGIN_BASE_URL;
+            add_filter( $filter_name, array( $this,'add_settings_link') );    
+        }
+
+        private function show_form(){
+            
+            $html = '
+            <div id="imf-wrapper">
+                <div id="imf-content">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <label for="upload_image">
+                            <div id="preview">
+                                <div id="crop-area">
+                                    <img src="'.IMFPLUGIN_URL.'public/images/hd1080.png" id="uploaded_image" width ="270"/>
+                                </div>
+                                <img src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" id="fg" data-design="0" />
+                            </div>
+			    			<input type="file" name="file" class="image" id="upload_image" style="display:none">
+
+                        </label>
+                    </form>
+                    <br>
+                    <h3>Frame Design</h3>
+                    <div id="designs">
+                        <img class="design active" src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" data-design="0" />
+                        <img class="design " src="'.IMFPLUGIN_URL.'public/images/frames/frame-1.png" data-design="1" />
+                        <img class="design" src="'.IMFPLUGIN_URL.'public/images/frames/frame-2.png" data-design="2" />
+                    </div>
+                    
+                    <p>
+                        <br><button id="download" disabled>Download Picture</button>
+                    </p>
+                </div>
+            </div>';
+
+            $html .= '
+            <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Crop Image Before Upload</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="img-container">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <img src="" id="sample_image" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="preview"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="crop">Crop</button>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+        
+            echo $html;
+        }
+        
+        public function social_media_frame(){
+            // do something
+            wp_enqueue_style("bootstrap");
+            wp_enqueue_style("imf-style");
+            wp_enqueue_style("imf-croppie");
+            wp_enqueue_script( 'jquery' );
+            wp_enqueue_script( 'bootstrap' );
+            wp_enqueue_script( 'imf-croppie' );
+            wp_enqueue_script( 'imf-app' );
+            $this->show_form();
+
+            
+        }
+
+        public function addMenu() {
+            add_menu_page('Social Media Frame','Social Media Frame',4,'social-media-frame',array( $this,'shortcode_display'),'dashicons-format-image');
+        }
+
+        public function shortcode_display(){
+            echo <<<'EOD'
+            <h2>Social Media Frame Shortcode</h2>
+            <p>Just use the shortcode as:</p>
+            <p><code>[social-media-frame]</code></p>
+            EOD;
+        }
+
+        public function add_settings_link($links) {
+            $settings_link = '<a href="admin.php?page=social-media-frame">' . __( 'Get Shortcode', 'social-media-frame' ) . '</a>';
+            array_push( $links, $settings_link );
+            return $links;
+        }
+      
+    }
+
+    SocialMediaFrame::init();
+}
 
 ?>

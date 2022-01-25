@@ -1,7 +1,7 @@
 html, body{
 	margin: 0;
 	padding: 0;
-	height: 100%;
+	height: 100vh;
 	font-family: Ubuntu, arial, sans-serif;
   word-wrap: break-word;
   word-break: break-word;
@@ -9,7 +9,7 @@ html, body{
 }
 #imf-wrapper{
 	min-height: 100%;
-
+  margin: 30px 0px;
   
     padding: 10px;
     background-size: 150px 110px;
@@ -27,11 +27,12 @@ html, body{
 #preview{
 	position: relative;
 	display: inline-block;
-	height: 500px;
-	width: 334px;
+	height: 270px;
+	width: 270px;
 	background: #fff;
+  margin: 20px 0px;
 }
-#profile-pic, #fg{
+#uploaded_image, #fg{
 	width: 100%;
 }
 #fg{
@@ -69,6 +70,7 @@ html, body{
   border: none;
 }
 .design{
+  margin: 10px 2px;
   height: 100px !important;
   border: 5px dashed #CCC !important;
   cursor: pointer;
@@ -84,4 +86,34 @@ html, body{
 		width: 100%;
 		margin: 0;
 	}
+}
+
+.image_area {
+  position: relative;
+}
+
+
+
+.preview {
+    overflow: hidden;
+    width: 160px; 
+    height: 160px;
+    margin: 10px;
+    border: 1px solid red;
+}
+
+.modal-lg{
+    max-width: 1000px !important;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  height: 0;
+  transition: .5s ease;
+  width: 100%;
 }
