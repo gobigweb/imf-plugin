@@ -92,6 +92,7 @@ document.getElementById("download").removeAttribute("disabled");
 };
 
 window.onFileChange = function(input){
+  
 if (input.files && input.files[0]) {
   var reader = new FileReader();
 
@@ -100,10 +101,18 @@ if (input.files && input.files[0]) {
     image.onload = function() {
       var width = this.width;
       var height = this.height;
-      if(width >= 1080 && height >= 1080)
-        updatePreview(e.target.result);
-      else
-        alert("Image should be atleast have 1080px width and 1080px height");
+      
+      if (['image/png','image/jpeg'].includes(input.files[0].type)) {
+        if(width >= 1080 && height >= 1080){
+          updatePreview(e.target.result);
+        }else{
+          alert("Image should be atleast have 1080px width and 1080px height");
+        }   
+      }else{
+        alert('Invalid File type');  
+      }
+
+      
     };
     image.src = e.target.result; 
   }

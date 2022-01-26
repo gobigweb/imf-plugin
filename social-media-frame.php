@@ -81,7 +81,7 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
                                     </div>
                                     <img src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" id="fg" data-design="0" width ="270"/>
                                 </div>
-                                <input type="file" name="file" class="image" id="upload_image" style="display:none" onchange="onFileChange(this)">
+                                <input type="file" name="file" class="image" id="upload_image" style="display:none" onchange="onFileChange(this)" accept="image/png, image/jpeg">
 
                             </label>
                         </form>
