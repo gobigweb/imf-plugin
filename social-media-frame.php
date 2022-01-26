@@ -53,14 +53,22 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
         private function action_hooks() {
             add_shortcode('social-media-frame', array( $this,'social_media_frame'));
             add_action( 'admin_menu',array( $this,'addMenu') );
-
+            add_action( 'admin_init',array( $this,'is_this_plugin_active') );
             $filter_name = "plugin_action_links_" . IMFPLUGIN_BASE_URL;
             add_filter( $filter_name, array( $this,'add_settings_link') );    
         }
 
         private function show_form(){
-            if(isset($_GET['share-image'])){      
-                include(IMFPLUGIN_PLUGIN_PATH."includes/social-media-frame-share-image.php");            
+            if(isset($_GET['share-image'])){ 
+                include_once( ABSPATH . 'wp-admin/includes/plugin.php' );     
+                include(IMFPLUGIN_PLUGIN_PATH."includes/social-media-frame-share-image.php"); 
+                
+                if ( is_plugin_active( 'sharethis-share-buttons/sharethis-share-buttons.php') ) {
+                    echo sharethis_inline_buttons(); 
+                }
+
+                echo '<br><br>';
+               
             }else{
                 $html = '
                 <div id="imf-wrapper">
@@ -105,13 +113,11 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             wp_enqueue_script( 'bootstrap' );
             wp_enqueue_script( 'imf-croppie' );
             wp_enqueue_script( 'imf-app' );
-            $this->show_form();
-
-            
+            $this->show_form();            
         }
 
         public function addMenu() {
-            add_menu_page('Social Media Frame','Social Media Frame',4,'social-media-frame',array( $this,'shortcode_display'),'dashicons-format-image');
+            add_menu_page('Social Media Frame','Social Media Frame','manage_options','social-media-frame',array( $this,'shortcode_display'),'dashicons-format-image');
         }
 
         public function shortcode_display(){
@@ -126,6 +132,38 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             $settings_link = '<a href="admin.php?page=social-media-frame">' . __( 'Get Shortcode', 'social-media-frame' ) . '</a>';
             array_push( $links, $settings_link );
             return $links;
+        }
+
+        public function is_this_plugin_active() {
+            if ( is_admin() && current_user_can( 'activate_plugins' ) &&  !is_plugin_active( 'sharethis-share-buttons/sharethis-share-buttons.php' ) ) {
+                add_action( 'admin_notices', array( $this, 'plugin_notice') );
+        
+                deactivate_plugins( plugin_basename( __FILE__ ) ); 
+        
+                if ( isset( $_GET['activate'] ) ) {
+                    unset( $_GET['activate'] );
+                }
+            }
+            
+        }
+
+        public function plugin_notice(){
+            $plugin_name = 'ShareThis Share Buttons';
+            $plugin_slug = 'sharethis-share-buttons';
+            $plugin_path = $plugin_slug.'/'.$plugin_slug.'.php';
+
+            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+            $installed_plugins = get_plugins();
+
+            if(array_key_exists( $plugin_slug, $installed_plugins ) || in_array( $plugin_slug, $installed_plugins, true )){
+                $link = wp_nonce_url(admin_url('plugins.php?action=activate&plugin='.$plugin_path), 'activate-plugin_'.$plugin_path);            
+                $install_link = '<a href="' . $link  . '">'.$plugin_name.'</a>';
+                $plugin_to = 'Active';
+            }else{
+                $install_link = '<a href="' . esc_url( network_admin_url('plugin-install.php?tab=plugin-information&plugin='.$plugin_slug.'&TB_iframe=true&width=600&height=550' ) ) . '" class="thickbox" title="More info about '.$plugin_name.'">'.$plugin_name.'</a>';
+                $plugin_to = 'Installed';
+            }
+            echo '<div class="notice notice-error is-dismissible"><p><strong>Social Media Frame Shortcode</strong> plugin requires the <strong>'.$install_link.'</strong> plugin to be '.$plugin_to.'</p></div>';
         }
       
     }
