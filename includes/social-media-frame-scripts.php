@@ -10,6 +10,7 @@ if ( !function_exists( 'social_media_frame_scripts' ) ) {
       wp_register_script('imf-croppie', IMFPLUGIN_URL.'public/js/croppie.min.js', [], time());
 
       $script_data_array = array(
+        'file_name' => rand_string(10),
         'security' => wp_create_nonce( 'file_upload' ),
       );
       wp_register_script('imf-app', IMFPLUGIN_URL.'public/js/app.js', [], time());
@@ -18,4 +19,15 @@ if ( !function_exists( 'social_media_frame_scripts' ) ) {
     }
   add_action( 'init', 'social_media_frame_scripts');
 }
+
+function rand_string($length) {
+  $str="";
+  $chars = "abcdefghijklmanopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  $size = strlen($chars);
+  for($i = 0;$i < $length;$i++) {
+    $str .= $chars[rand(0,$size-1)];
+  }
+  return $str;
+}
+
 ?>

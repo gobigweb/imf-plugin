@@ -58,16 +58,6 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             add_filter( $filter_name, array( $this,'add_settings_link') );    
         }
 
-        public function rand_string($length) {
-            $str="";
-            $chars = "abcdefghijklmanopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            $size = strlen($chars);
-            for($i = 0;$i < $length;$i++) {
-             $str .= $chars[rand(0,$size-1)];
-           }
-           return $str;
-         }
-
         private function show_form(){
             if (isset($_GET['upload-image'])) {
                 check_ajax_referer('file_upload', 'security');
@@ -88,7 +78,7 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
                         isset($_POST["design"]) ? $_POST["design"] : 0
                     ));
                 
-                    $image_name = $_POST['security']. ".png";
+                    $image_name = $_POST['file_name']. ".png";
 
                     $new_file_path = $wordpress_upload_dir['path'] . '/' . $image_name;
                     $new_file_mime = mime_content_type( $_FILES["image"]['tmp_name'] );

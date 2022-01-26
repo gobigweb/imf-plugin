@@ -32,6 +32,7 @@ croppie.result({
   formData.append("design", jQuery("#fg").data("design"));
   formData.append("image", dataURItoBlob(dataURI));
   formData.append('security', data_ajax.security);
+  formData.append('file_name', data_ajax.file_name);
   jQuery.ajax({
     url: '?upload-image='+data_ajax.security,
     data: formData,
@@ -40,7 +41,7 @@ croppie.result({
     processData: false,
     success: function(){
       document.getElementById("download").innerHTML = "Share Image";
-      window.location.href = '?share-image='+data_ajax.security;
+      window.location.href = '?share-image='+data_ajax.file_name;
     },
     error: function(){
       document.getElementById("download").innerHTML = "Share Image";
