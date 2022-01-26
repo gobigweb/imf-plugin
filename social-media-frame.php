@@ -59,65 +59,41 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
         }
 
         private function show_form(){
+            if(isset($_GET['share-image'])){      
+                include(IMFPLUGIN_PLUGIN_PATH."includes/social-media-frame-share-image.php");            
+            }else{
+                $html = '
+                <div id="imf-wrapper">
+                    <div id="imf-content">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <label for="upload_image">
+                                <div id="preview">
+                                    <div id="crop-area">
+                                        <img src="'.IMFPLUGIN_URL.'public/images/hd1080.png" id="uploaded_image" width ="270"/>
+                                    </div>
+                                    <img src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" id="fg" data-design="0" width ="270"/>
+                                </div>
+                                <input type="file" name="file" class="image" id="upload_image" style="display:none" onchange="onFileChange(this)">
+
+                            </label>
+                        </form>
+                        <br>
+                        <h3>Frame Design</h3>
+                        <div id="designs">
+                            <img class="design active" src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" data-design="0"/>
+                            <img class="design " src="'.IMFPLUGIN_URL.'public/images/frames/frame-1.png" data-design="1" />
+                            <img class="design" src="'.IMFPLUGIN_URL.'public/images/frames/frame-2.png" data-design="2"/>
+                        </div>
+                        
+                        <p>
+                            <br><button id="download" disabled>Share Image</button>
+                        </p>
+                    </div>
+                </div>';
             
-            $html = '
-            <div id="imf-wrapper">
-                <div id="imf-content">
-                    <form action="" method="post" enctype="multipart/form-data">
-                        <label for="upload_image">
-                            <div id="preview">
-                                <div id="crop-area">
-                                    <img src="'.IMFPLUGIN_URL.'public/images/hd1080.png" id="uploaded_image" width ="270"/>
-                                </div>
-                                <img src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" id="fg" data-design="0" />
-                            </div>
-			    			<input type="file" name="file" class="image" id="upload_image" style="display:none">
-
-                        </label>
-                    </form>
-                    <br>
-                    <h3>Frame Design</h3>
-                    <div id="designs">
-                        <img class="design active" src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" data-design="0" />
-                        <img class="design " src="'.IMFPLUGIN_URL.'public/images/frames/frame-1.png" data-design="1" />
-                        <img class="design" src="'.IMFPLUGIN_URL.'public/images/frames/frame-2.png" data-design="2" />
-                    </div>
-                    
-                    <p>
-                        <br><button id="download" disabled>Download Picture</button>
-                    </p>
-                </div>
-            </div>';
-
-            $html .= '
-            <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Crop Image Before Upload</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="img-container">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <img src="" id="sample_image" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="preview"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="crop">Crop</button>
-                        </div>
-                    </div>
-                </div>
-            </div>';
-        
-            echo $html;
+                echo $html;
+            }
+            
         }
         
         public function social_media_frame(){

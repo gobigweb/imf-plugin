@@ -50,7 +50,9 @@ if(isset($_FILES["image"])){
     wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
   
     // Show the uploaded file in browser
-    echo $_SESSION['loc'] = $wordpress_upload_dir['url'] . '/' . basename( $new_file_path );
+    $_SESSION['loc'] = $wordpress_upload_dir['url'] . '/' . basename( $new_file_path );
+
+    echo basename( $new_file_path );
   }
   
 }
