@@ -31,15 +31,16 @@ croppie.result({
   var formData = new FormData();
   formData.append("design", jQuery("#fg").data("design"));
   formData.append("image", dataURItoBlob(dataURI));
+  formData.append('security', data_ajax.security);
   jQuery.ajax({
-    url: action_url_ajax.ajaxurl,
+    url: '?upload-image='+data_ajax.security,
     data: formData,
     type: "POST",
     contentType: false,
     processData: false,
-    success: function(data){
+    success: function(){
       document.getElementById("download").innerHTML = "Share Image";
-      window.location.href = "?share-image="+ data;
+      window.location.href = '?share-image='+data_ajax.security;
     },
     error: function(){
       document.getElementById("download").innerHTML = "Share Image";

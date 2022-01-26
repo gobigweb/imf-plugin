@@ -58,17 +58,73 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             add_filter( $filter_name, array( $this,'add_settings_link') );    
         }
 
+        public function rand_string($length) {
+            $str="";
+            $chars = "abcdefghijklmanopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            $size = strlen($chars);
+            for($i = 0;$i < $length;$i++) {
+             $str .= $chars[rand(0,$size-1)];
+           }
+           return $str;
+         }
+
         private function show_form(){
-            if(isset($_GET['share-image'])){ 
+            if (isset($_GET['upload-image'])) {
+                check_ajax_referer('file_upload', 'security');
+
+                
+                include('convert.php');
+                include_once( ABSPATH . 'wp-load.php' );
+
+                $wordpress_upload_dir = wp_upload_dir();
+
+                if(isset($_FILES["image"])){
+                    $sourceImg = @imagecreatefromstring(@file_get_contents($_FILES["image"]["tmp_name"]));
+                    if ($sourceImg === false){
+                        exit;
+                    }
+                
+                    $image = makeDP($_FILES["image"]["tmp_name"], (
+                        isset($_POST["design"]) ? $_POST["design"] : 0
+                    ));
+                
+                    $image_name = $_POST['security']. ".png";
+
+                    $new_file_path = $wordpress_upload_dir['path'] . '/' . $image_name;
+                    $new_file_mime = mime_content_type( $_FILES["image"]['tmp_name'] );
+                    
+                    if(file_put_contents($new_file_path, $image)){
+                        $upload_id = wp_insert_attachment( array(
+                            'guid'           => $new_file_path, 
+                            'post_mime_type' => $new_file_mime,
+                            'post_title'     => preg_replace( '/\.[^.]+$/', '', $image_name ),
+                            'post_content'   => preg_replace( '/\.[^.]+$/', '', $image_name ),
+                            'post_status'    => 'inherit'
+                        ), $new_file_path );
+                    
+                        // wp_generate_attachment_metadata() won't work if you do not include this file
+                        require_once( ABSPATH . 'wp-admin/includes/image.php' );
+                        
+                        // Generate and save the attachment metas into the database
+                        wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
+                        
+                        // Show the uploaded file in browser
+                        $_SESSION['loc'] = $wordpress_upload_dir['url'] . '/' . basename( $new_file_path );
+                    
+                        
+                    }
+                }
+
+            }elseif (isset($_GET['share-image'])) {
                 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );     
                 include(IMFPLUGIN_PLUGIN_PATH."includes/social-media-frame-share-image.php"); 
-                
+                    
                 if ( is_plugin_active( 'sharethis-share-buttons/sharethis-share-buttons.php') ) {
                     echo sharethis_inline_buttons(); 
                 }
-
+    
                 echo '<br><br>';
-               
+            
             }else{
                 $html = '
                 <div id="imf-wrapper">
