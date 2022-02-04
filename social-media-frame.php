@@ -123,16 +123,16 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
                             <label for="upload_image">
                                 <div id="preview">
                                     <div id="crop-area">
-                                        <img src="'.IMFPLUGIN_URL.'public/images/hd1080.png" id="uploaded_image" width ="270"/>
+                                        <img src="'.IMFPLUGIN_URL.'public/images/hd1080.png" id="uploaded_image" width ="400"/>
                                     </div>
-                                    <img src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" id="fg" data-design="0" width ="270"/>
+                                    <img src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" id="fg" data-design="0" width ="400"/>
                                 </div>
                                 <input type="file" name="file" class="image" id="upload_image" style="display:none" onchange="onFileChange(this)" accept="image/png, image/jpeg">
 
                             </label>
                         </form>
-                        <br>
-                        <h3>Frame Design</h3>
+                        <br><br>
+                        <h3>Select Frame Design</h3>
                         <div id="designs">
                             <img class="design active" src="'.IMFPLUGIN_URL.'public/images/frames/frame-0.png" data-design="0"/>
                             <img class="design " src="'.IMFPLUGIN_URL.'public/images/frames/frame-1.png" data-design="1" />
@@ -144,6 +144,9 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
                         <p>
                             <br><button id="download" disabled>Share Image</button>
                         </p>
+
+                        <br>
+                        <h3>Select a frame, upload your image and share your post on social media</h3>
                     </div>
                 </div>';
             

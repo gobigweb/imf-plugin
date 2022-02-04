@@ -27,8 +27,8 @@ html, body{
 #preview{
 	position: relative;
 	display: inline-block;
-	height: 270px;
-	width: 270px;
+	height: 550px;
+	width: 550px;
 	background: #fff;
   margin: 20px 0px;
 }
@@ -48,7 +48,7 @@ html, body{
   margin: 20px auto;
 }
 #download{
-  padding: 10px 20px;
+  padding: 20px 40px;
   background: #092e7b;
   color: #fff;
   font-size: 1em;
