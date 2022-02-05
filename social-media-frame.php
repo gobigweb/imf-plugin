@@ -51,7 +51,8 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
         }
 
         private function action_hooks() {
-            add_shortcode('social-media-frame', array( $this,'social_media_frame'));
+            add_shortcode('social-media-frame', array( $this,'social_media_frame'));            
+            add_shortcode('social-media-frame-share', array( $this,'social_media_frame_share'));
             add_action( 'admin_menu',array( $this,'addMenu') );
             add_action( 'admin_init',array( $this,'is_this_plugin_active') );
             $filter_name = "plugin_action_links_" . IMFPLUGIN_BASE_URL;
@@ -165,6 +166,73 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             wp_enqueue_script( 'imf-croppie' );
             wp_enqueue_script( 'imf-app' );
             $this->show_form();            
+        }
+
+        private function get_attachment_url_by_slug( $slug ) {
+            include_once( ABSPATH . 'wp-load.php' );
+            $args = array(
+              'post_type' => 'attachment',
+              'name' => sanitize_title($slug),
+              'posts_per_page' => 1,
+              'post_status' => 'inherit',
+            );
+            $_header = get_posts( $args );
+            $header = $_header ? array_pop($_header) : null;
+            return $header ? wp_get_attachment_url($header->ID) : '';
+        }
+
+        private function add_meta_tags($slug) {
+
+            $img_url = $this->get_attachment_url_by_slug($slug);
+            echo '
+            <!-- Facebook Meta Tags -->
+            <meta property="og:url" content="https://derekc84.sg-host.com/social-media-frame-share/?share-image='.$slug.'">
+            <meta property="og:type" content="website">
+            <meta property="og:title" content="Myeloma">
+            <meta property="og:description" content="#myeloma">
+            <meta property="og:image" content="'.$img_url.'">
+
+            <!-- Twitter Meta Tags -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta property="twitter:domain" content="derekc84.sg-host.com">
+            <meta property="twitter:url" content="https://derekc84.sg-host.com/social-media-frame-share/?share-image='.$slug.'">
+            <meta name="twitter:title" content="Myeloma">
+            <meta name="twitter:description" content="#myeloma">
+            <meta name="twitter:image" content="'.$img_url.'">
+
+            ';
+        }
+
+        
+        public function social_media_frame_share(){
+            
+            $url = $this->get_attachment_url_by_slug($_GET['share-image']);
+            
+            add_action('wp_head', $this->add_meta_tags($_GET['share-image']));
+            // do something
+            wp_enqueue_style("bootstrap");
+            wp_enqueue_style("imf-style");
+            wp_enqueue_style("imf-croppie");
+            wp_enqueue_script( 'jquery' );
+            wp_enqueue_script( 'bootstrap' );
+            wp_enqueue_script( 'imf-croppie' );
+            wp_enqueue_script( 'imf-app' );
+            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );    
+            
+            
+
+            echo "
+            <div id='imf-wrapper'>
+                <div id='imf-content'>
+                <img src='". $url ."' />
+                </div>
+            </div>";      
+            
+            if ( is_plugin_active( 'sharethis-share-buttons/sharethis-share-buttons.php') ) {
+                echo sharethis_inline_buttons(); 
+            }
+    
+            echo '<br><br>';            
         }
 
         public function addMenu() {

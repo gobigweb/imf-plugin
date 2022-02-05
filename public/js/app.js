@@ -41,7 +41,7 @@ croppie.result({
     processData: false,
     success: function(){
       document.getElementById("download").innerHTML = "Share Image";
-      window.location.href = '?share-image='+data_ajax.file_name;
+      window.location.href = 'social-media-frame-share?share-image='+data_ajax.file_name;
     },
     error: function(){
       document.getElementById("download").innerHTML = "Share Image";
@@ -70,18 +70,18 @@ document.getElementById("crop-area").innerHTML = "";
 window.croppie = new Croppie(document.getElementById("crop-area"), {
   "url": url,
   boundary: {
-    height: 270,
-    width: 270
+    height: 550,
+    width: 550
   },
   viewport: {
-    width: 270,
-    height: 270
+    width: 550,
+    height: 550
   },
 });
 
-jQuery("#fg").on('mouseover touchstart', function(){
-  document.getElementById("fg").style.zIndex = -1;
-});
+// jQuery("#fg").on('mouseover touchstart', function(){
+//   document.getElementById("fg").style.zIndex = -1;
+// });
 jQuery(".cr-boundary").on('mouseleave touchend', function(){
   document.getElementById("fg").style.zIndex = 10;
 });
@@ -95,32 +95,32 @@ document.getElementById("download").removeAttribute("disabled");
 
 window.onFileChange = function(input){
   
-if (input.files && input.files[0]) {
-  var reader = new FileReader();
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
 
-  reader.onload = function (e) {
-    image = new Image();
-    image.onload = function() {
-      var width = this.width;
-      var height = this.height;
-      
-      if (['image/png','image/jpeg'].includes(input.files[0].type)) {
-        if(width >= 1080 && height >= 1080){
-          updatePreview(e.target.result);
+    reader.onload = function (e) {
+      image = new Image();
+      image.onload = function() {
+        var width = this.width;
+        var height = this.height;
+        
+        if (['image/png','image/jpeg'].includes(input.files[0].type)) {
+          if(width >= 100 && height >= 100){
+            updatePreview(e.target.result);
+          }else{
+            alert("Image should be atleast have 1080px width and 1080px height");
+          }   
         }else{
-          alert("Image should be atleast have 1080px width and 1080px height");
-        }   
-      }else{
-        alert('Invalid File type');  
-      }
+          alert('Invalid File type');  
+        }
 
-      
-    };
-    image.src = e.target.result; 
+        
+      };
+      image.src = e.target.result; 
+    }
+
+    reader.readAsDataURL(input.files[0]);
   }
-
-  reader.readAsDataURL(input.files[0]);
-}
 }
 
 jQuery(document).ready(function(){
