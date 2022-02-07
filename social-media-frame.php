@@ -55,6 +55,7 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             add_shortcode('social-media-frame-share', array( $this,'social_media_frame_share'));
             add_action( 'admin_menu',array( $this,'addMenu') );
             add_action( 'admin_init',array( $this,'is_this_plugin_active') );
+            add_filter( 'pre_get_document_title', array( $this,'change_page_title'));
             $filter_name = "plugin_action_links_" . IMFPLUGIN_BASE_URL;
             add_filter( $filter_name, array( $this,'add_settings_link') );    
         }
@@ -181,6 +182,14 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             return $header ? wp_get_attachment_url($header->ID) : '';
         }
 
+        public function change_page_title(){
+            global $post;
+            if ($post->post_name === "social-media-frame-share") {
+                return "#myeloma"; 
+            }
+                   
+        }
+
         private function add_meta_tags($slug) {
 
             $img_url = $this->get_attachment_url_by_slug($slug);
@@ -202,13 +211,12 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
 
             ';
         }
-
         
         public function social_media_frame_share(){
             
-            $url = $this->get_attachment_url_by_slug($_GET['share-image']);
-            
+            $url = $this->get_attachment_url_by_slug($_GET['share-image']);             
             add_action('wp_head', $this->add_meta_tags($_GET['share-image']));
+            
             // do something
             wp_enqueue_style("bootstrap");
             wp_enqueue_style("imf-style");
@@ -242,8 +250,12 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
         public function shortcode_display(){
             echo <<<'EOD'
             <h2>Social Media Frame Shortcode</h2>
-            <p>Just use the shortcode as:</p>
+            <p>Just use the shortcode as upload page:</p>
             <p><code>[social-media-frame]</code></p>
+            <br>
+            <p>Create a Page Next, add the title of the page 'Social Media Frame Share'</p>
+            <p>use the shortcode as share page:</p>
+            <p><code>[social-media-frame-share]</code></p>
             EOD;
         }
 
