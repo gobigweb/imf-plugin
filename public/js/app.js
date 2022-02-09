@@ -21,8 +21,8 @@ function dataURItoBlob(dataURI) {
 window.uploadPicture = function(){
 
 var imageSize = {
-    width: 1080,
-    height: 1080,
+    width: 1200,
+    height: 630,
     type: 'square'
 };
 croppie.result({
@@ -108,7 +108,7 @@ window.onFileChange = function(input){
           if(width >= 100 && height >= 100){
             updatePreview(e.target.result);
           }else{
-            alert("Image should be atleast have 1080px width and 1080px height");
+            alert("Image should be atleast have 100px width and 100px height");
           }   
         }else{
           alert('Invalid File type');  
@@ -124,9 +124,9 @@ window.onFileChange = function(input){
 }
 
 jQuery(document).ready(function(){
-jQuery(".design").on("click", function(){
-  jQuery("#fg").attr("src", jQuery(this).attr("src")).data("design", jQuery(this).data("design"));
-  jQuery(".design.active").removeClass("active");
-  jQuery(this).addClass("active");
-});
+  jQuery(".design").on("click", function(){
+    jQuery("#fg").attr("src", jQuery(this).attr("src")).data("design", jQuery(this).data("design"));
+    jQuery(".design.active").removeClass("active");
+    jQuery(this).addClass("active");
+  });
 });

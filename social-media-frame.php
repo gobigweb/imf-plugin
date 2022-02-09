@@ -185,7 +185,7 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
         public function change_page_title(){
             global $post;
             if ($post->post_name === "social-media-frame-share") {
-                return "#myeloma"; 
+                return "#MYelomaACTION"; 
             }
                    
         }
@@ -195,18 +195,18 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             $img_url = $this->get_attachment_url_by_slug($slug);
             echo '
             <!-- Facebook Meta Tags -->
-            <meta property="og:url" content="https://derekc84.sg-host.com/social-media-frame-share/?share-image='.$slug.'">
+            <meta property="og:url" content="https://myeloma.org/">
             <meta property="og:type" content="website">
-            <meta property="og:title" content="Myeloma">
-            <meta property="og:description" content="#myeloma">
+            <meta property="og:title" content="MYelomaACTION">
+            <meta property="og:description" content="#MYelomaACTION">
             <meta property="og:image" content="'.$img_url.'">
 
             <!-- Twitter Meta Tags -->
             <meta name="twitter:card" content="summary_large_image">
-            <meta property="twitter:domain" content="derekc84.sg-host.com">
-            <meta property="twitter:url" content="https://derekc84.sg-host.com/social-media-frame-share/?share-image='.$slug.'">
-            <meta name="twitter:title" content="Myeloma">
-            <meta name="twitter:description" content="#myeloma">
+            <meta property="twitter:domain" content="myeloma.org">
+            <meta property="twitter:url" content="https://myeloma.org/">
+            <meta name="twitter:title" content="MYelomaACTION">
+            <meta name="twitter:description" content="#MYelomaACTION">
             <meta name="twitter:image" content="'.$img_url.'">
 
             ';
