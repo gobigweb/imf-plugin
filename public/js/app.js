@@ -77,11 +77,12 @@ window.croppie = new Croppie(document.getElementById("crop-area"), {
     width: 550,
     height: 550
   },
+  enableResize: true,
 });
 
-// jQuery("#fg").on('mouseover touchstart', function(){
-//   document.getElementById("fg").style.zIndex = -1;
-// });
+jQuery("#fg").on('mouseover touchstart', function(){
+  //document.getElementById("fg").style.zIndex = -1;
+});
 jQuery(".cr-boundary").on('mouseleave touchend', function(){
   document.getElementById("fg").style.zIndex = 10;
 });

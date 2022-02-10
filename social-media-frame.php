@@ -107,16 +107,7 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
                     }
                 }
 
-            }elseif (isset($_GET['share-image'])) {
-                include_once( ABSPATH . 'wp-admin/includes/plugin.php' );     
-                include(IMFPLUGIN_PLUGIN_PATH."includes/social-media-frame-share-image.php"); 
-                    
-                if ( is_plugin_active( 'sharethis-share-buttons/sharethis-share-buttons.php') ) {
-                    echo sharethis_inline_buttons(); 
-                }
-    
-                echo '<br><br>';
-            
+           
             }else{
                 $html = '
                 <div id="imf-wrapper">
@@ -239,6 +230,8 @@ if ( !class_exists( 'SocialMediaFrame' ) ) {
             if ( is_plugin_active( 'sharethis-share-buttons/sharethis-share-buttons.php') ) {
                 echo sharethis_inline_buttons(); 
             }
+
+            echo "<br><p style='text-align:center;'><a id='download'style='padding: 10px 20px;font-size:12px; border-radius: 4px;'   href='". $url ."' download='MYelomaACTION'>DOWNLOAD IMAGE</a></p>";    
     
             echo '<br><br>';            
         }
