@@ -117,3 +117,18 @@ html, body{
   transition: .5s ease;
   width: 100%;
 }
+
+@media screen and (max-width : 768px){
+  #preview{
+    width: 100%;
+    height: auto;
+  }
+
+  #imf-content{
+   width: 100%;
+  }
+
+  .design {
+    height: 60px !important;
+  }
+}
